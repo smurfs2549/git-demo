@@ -1,0 +1,56 @@
+With modernizer & CSS3PIE you thought you had this one all figured out.
+Think again. CSS selector limit. Boom.
+So, what is it?
+Bless provides an elegant solution to a lesser-known bug in Internet Explorer which causes CSS to be completely ignored. It runs server-side and on your local machine with Node.js
+
+Say what?
+IE versions 6, 7, 8 & 9 all have a limit on the number of selectors allowed in a single CSS file. Once the limit is reached, IE silently fails and just ignores any further CSS in the file leaving parts of your site totally unstyled.
+
+File size, number of lines or amount of whitespace are irrelevant. Minifying CSS will not help you here.
+
+I've never come across this before...
+Chances are, so far you've worked on smaller scale sites and/or separated out CSS across multiple files. Once a project reaches a certain size however, there's no going back.
+
+If you're using a CSS compiler such as Less, Sass or Stylus it's likely that you're exporting everything to a single CSS file to reduce http hits. If your project is a substantial one or you're using a base template such as HTML5 boilerplate, you're a prime candidate to have come across this issue or will encounter it soon.
+
+Check out this page in IE and you'll notice a visible difference. There are no special methods being used to target Internet Explorer - IE is simply ignoring the CSS which makes this page's color scheme blue.
+
+So what's the solution?
+Keep the number of selectors in a single file below the limit by splitting your CSS over multiple stylesheets.
+
+Totally lame to manage manually, and unless you keep count of the number of selectors per file you'll probably end up taking additional http hits because you separated styling out into several files for organization or 'just in case'.
+
+Help!
+Relax. Download bless and you're all set. Or alternatively:
+
+$ npm install bless -g
+Usage
+Pass in a CSS file and your stylesheet will be split into the minimum number of files necessary to keep you out of trouble. If you're already below the limit, no action is taken.
+
+$ blessc style.css
+There's no need to change your markup to include any additional files. @import directives are added to the file you originally provided. Pass in the -x option to 'minify' those statements.
+
+$ blessc style.css -x
+If you removed some styling since you last ran bless, you may now require fewer CSS files. Any previously generated files which are no longer needed are removed by default. Disable by using the --no-cleanup option.
+
+$ blessc style.css --no-cleanup
+It's even possible to read from stdin for your input, which means you can pass the output from your favorite CSS compiler straight to bless by using '-' as your source.
+
+$ lessc source.less | blessc - output.css
+If you're not using one of the aforementioned CSS pre-processors but are going old school with straight up CSS, you probably don't want to mess with your source file. To preserve your original file, you can output to a new set of files by passing in a destination filename.
+
+$ blessc source.css output.css
+Check which version you're running.
+
+$ blessc -v
+Turn off the cache buster.
+
+$ blessc source.css output.css --no-cache-buster
+Is this going to slow down my workflow?
+The example.css file below contains 12,286 selectors. Bless splits it into 4 files in 0.19 seconds.
+
+Demo
+Download this example css file and try it out.
+
+Why the weird name?
+It was born out of using Less, and seems an appropriate verb. You 'Fedex' parcels, 'Google' yourself and 'Bless' CSS files.
